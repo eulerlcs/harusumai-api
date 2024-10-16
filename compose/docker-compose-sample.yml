@@ -1,0 +1,19 @@
+services:
+  harusamai-api:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    image:
+      harusumai-api:0.0.1-dev
+    container_name: harusumai-api
+    restart: unless-stopped
+    environment:
+      TZ: "Asia/Tokyo"
+      
+      DB_HOST: 
+      DB_USERNAME: 
+      DB_PASSWORD: 
+    ports:
+      - 9527:80
+    volumes:
+      - ./log:/app/log

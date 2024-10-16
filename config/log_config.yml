@@ -1,0 +1,43 @@
+version: 1
+disable_existing_loggers: false
+formatters:
+  standard:
+    format: '%(asctime)s | %(name)s:%(lineno)s | %(funcName)s | %(levelname)s | %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+  access:
+    "()": uvicorn.logging.AccessFormatter
+    format: '%(asctime)s | %(process)d:%(threadName)s | %(client_addr)s | %(name)s | %(levelname)s | %(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: standard
+    stream: ext://sys.stdout
+  file:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: standard
+    filename: ./log/aaa.log
+    maxBytes: 10485760 #10M
+    backupCount: 5
+    encoding: utf8
+  access_file:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: access
+    filename: ./log/access.log
+    maxBytes: 10485760 #10M
+    backupCount: 5
+    encoding: utf8
+loggers:
+  uvicorn:
+    handlers: [console, file]
+    level: INFO
+    propagate: no
+  uvicorn.access:
+    handlers: [console, access_file, file]
+    level: INFO
+    propagate: no
+root:
+  level: DEBUG
+  handlers: [console, file]
